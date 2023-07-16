@@ -102,3 +102,9 @@
   align-items: center;
   justify-content: center;
 }
+
+/* Product Link */
+.product-link {
+  text-decoration: none !important;
+  color: black !important;
+}
