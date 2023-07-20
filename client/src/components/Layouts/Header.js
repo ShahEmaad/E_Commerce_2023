@@ -2,12 +2,19 @@ import React from 'react';
 import {NavLink , Link} from 'react-router-dom';
 import { useAuth } from '../../context/auth.js';
 import {AiFillShop} from 'react-icons/ai';
+import {FaShoppingCart} from 'react-icons/fa';
 
 import toast from 'react-hot-toast';
+import SearchInput from "../Form/SearchInput.js";
 
+import { useCart } from "../../context/cart";
+
+import useCategory from '../../hooks/useCategory.js';
 
 const Header = () => {
+  const [cart] = useCart();
   const [auth,setAuth] = useAuth();
+  const categories = useCategory();
   const handleLogout = () => {
     setAuth({
       //Persist previous data
@@ -28,12 +35,38 @@ const Header = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
             <Link to="/" className="navbar-brand"><AiFillShop /> ECommerce App</Link>
+            <SearchInput/>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+              
               <li className="nav-item">
                 <NavLink to="/" className="nav-link">Home</NavLink>
               </li>
-              <li className="nav-item">
-                <NavLink to="/category" className="nav-link">Category</NavLink>
+              
+              <li className="nav-item dropdown">
+                <Link
+                  className="nav-link dropdown-toggle"
+                  to={"/categories"}
+                  data-bs-toggle="dropdown"
+                >
+                  Categories
+                </Link>
+                <ul className="dropdown-menu">
+                  <li>
+                    <Link className="dropdown-item" to={"/categories"}>
+                      All Categories
+                    </Link>
+                  </li>
+                  {categories?.map((c) => (
+                    <li>
+                      <Link
+                        className="dropdown-item"
+                        to={`/category/${c.slug}`}
+                      >
+                        {c.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </li>
 
               {
@@ -77,7 +110,14 @@ const Header = () => {
               }
 
               <li className="nav-item">
-                <NavLink to="/cart" className="nav-link">Cart (0)</NavLink>
+                <NavLink to="/cart" className="nav-link position-relative">
+                    <FaShoppingCart />
+                    <span className="position-absolute top-2 start-99 translate-middle badge rounded-pill bg-danger">
+                      {cart?.length}
+                      <span className="visually-hidden">unread messages</span>
+                    </span>
+                  
+                </NavLink>
               </li>
               
             </ul>
