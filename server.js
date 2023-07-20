@@ -9,6 +9,7 @@ import productRoutes from './routes/productRoute.js';
 import categoryRoutes from './routes/categoryRoute.js';
 
 import path from "path";
+import { fileURLToPath } from "url";
 
 //Concurrent Servers
 import cors from 'cors';
@@ -18,6 +19,10 @@ dotenv.config();
 
 //Connect DB
 connectDB();
+
+//ES6-Module Fix
+const __filename = fileURLToPath(import.meta.url);
+const __dirname  = path.dirname(__filename);
 
 //rest object
 const app = express();
