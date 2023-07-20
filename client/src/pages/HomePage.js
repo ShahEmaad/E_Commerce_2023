@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import { Prices } from "../components/Prices";
 import { useCart } from "../context/cart";
 
+import "../styles/HomePage.css";
+
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -127,8 +129,16 @@ const HomePage = () => {
 
     return (
       <Layout title={'All Products - Best Offers'}>
-          <div className='container-fluid row mt-3'>
-              <div className='col-md-3'>
+          {/* banner image */}
+          <img
+            src="/images/banner.png"
+            className="banner-img"
+            alt="bannerimage"
+            width={"100%"}
+          />
+          {/* banner image */}
+          <div className='container-fluid row mt-3 home-page'>
+              <div className='col-md-3 filters '>
                   <h4 className='text-center'>Filter By Category</h4>
                   <div className='d-flex flex-column'>
                     {categories?.map((c) => (
@@ -187,30 +197,44 @@ const HomePage = () => {
                                 className="card-img-top"
                                 alt={p.name}
                             />
+
                             <div className="card-body">
-                                <h5 className="card-title">{p.name}</h5>
-                                <p className="card-text">{p.description.substring(0, 30)}</p>
-                                <p className="card-text">${p.price}</p>
-                                <button
-                                  className="btn btn-primary ms-1"
-                                  onClick={() => navigate(`/product/${p.slug}`)}
-                                >
-                                  More Details
-                                </button>
+                                <div className="card-name-price">
+                                  <h5 className="card-title">{p.name}</h5>
+                                  <h5 className="card-title card-price">
+                                    {p.price.toLocaleString("en-US", {
+                                      style: "currency",
+                                      currency: "USD",
+                                    })}
+                                  </h5>
+                                </div>
                                 
-                                <button
-                                  className="btn btn-secondary ms-1"
-                                  onClick={() => {
-                                    setCart([...cart, p]);
-                                    localStorage.setItem(
-                                      "cart",
-                                      JSON.stringify([...cart, p])
-                                    );
-                                    toast.success("Item Added to cart");
-                                  }}
-                                >
-                                  ADD TO CART
-                                </button>
+                                <p className="card-name-price">
+                                  {p.description.substring(0, 60)}...
+                                </p>
+                                
+                                <div className="card-name-price">
+                                  <button
+                                    className="btn btn-info ms-1"
+                                    onClick={() => navigate(`/product/${p.slug}`)}
+                                  >
+                                    More Details
+                                  </button>
+                                
+                                  <button
+                                    className="btn btn-dark ms-1"
+                                    onClick={() => {
+                                      setCart([...cart, p]);
+                                      localStorage.setItem(
+                                        "cart",
+                                        JSON.stringify([...cart, p])
+                                      );
+                                      toast.success("Item Added to cart");
+                                    }}
+                                  >
+                                    ADD TO CART
+                                  </button>
+                                </div>
                             </div>
                           </div>
                         ))}
@@ -218,7 +242,7 @@ const HomePage = () => {
                     <div className='m-2 p-3'>
                       {products && products.length < total && (
                         <button
-                          className="btn btn-warning"
+                          className="btn loadmore"
                           onClick={(e) => {
                             e.preventDefault();
                             setPage(page + 1);
